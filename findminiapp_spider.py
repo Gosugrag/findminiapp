@@ -36,6 +36,11 @@ class FindMiniAppSpider(scrapy.Spider):
         self.sheet_manager = GoogleSheetsManager()
 
     def parse(self, response):
+        if not self.sheet_manager.spreadsheet_id:
+            self.logger.error(
+                "No valid spreadsheet ID. Stopping the scraping process.")
+            return
+
         category_links = {response.urljoin(link) for link in
                           response.xpath('/html/body/div[1]/main/div[1]/a/@href').getall() if
                           "/category/" in link}

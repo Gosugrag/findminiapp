@@ -45,29 +45,24 @@ class GoogleSheetsManager:
             return spreadsheet_id
 
         except Exception as e:
-            logger.error(f"❌ Failed to get or create spreadsheet: {e}")
+            logger.error(f"❌ Failed to create spreadsheet: {e}")
             return None
 
     def share_spreadsheet(self, spreadsheet_id, user_email):
         """Share spreadsheet with a user."""
-        try:
-            permission = {
-                "type": "user",
-                "role": "writer",
-                "emailAddress": user_email,
-                "pendingOwner": True
-            }
-            custom_message = f"Hello,\n\nI have shared a Google Spreadsheet with you. You can access it via the link below:\n\nhttps://docs.google.com/spreadsheets/d/{spreadsheet_id}"
-            self.drive_service.permissions().create(
-                fileId=spreadsheet_id,
-                body=permission,
-                sendNotificationEmail=True,
-                emailMessage=custom_message
-            ).execute()
-            logger.info(f"📩 Shared spreadsheet with {user_email}")
-
-        except Exception as e:
-            logger.error(f"❌ Failed to share spreadsheet: {e}")
+        permission = {
+            "type": "user",
+            "role": "writer",
+            "emailAddress": user_email,
+            "pendingOwner": True
+        }
+        custom_message = f"Hello,\n\nI have shared a Google Spreadsheet with you. You can access it via the link below:\n\nhttps://docs.google.com/spreadsheets/d/{spreadsheet_id}"
+        self.drive_service.permissions().create(
+            fileId=spreadsheet_id,
+            body=permission,
+            sendNotificationEmail=True,
+            emailMessage=custom_message
+        ).execute()
 
     def rename_first_sheet(self, row_nums):
         """Rename the first sheet if it's the default sheet."""
