@@ -51,12 +51,20 @@ class GoogleSheetsManager:
     def share_spreadsheet(self, spreadsheet_id, user_email):
         """Share spreadsheet with a user."""
         permission = {
+            "type": "anyone",
+            "role": "reader"
+        }
+        self.drive_service.permissions().create(
+            fileId=spreadsheet_id,
+            body=permission
+        ).execute()
+        permission = {
             "type": "user",
             "role": "writer",
             "emailAddress": user_email,
             "pendingOwner": True
         }
-        custom_message = f"Hello,\n\nI have shared a Google Spreadsheet with you. You can access it via the link below:\n\nhttps://docs.google.com/spreadsheets/d/{spreadsheet_id}"
+        custom_message = f"Hello,\n\nI have shared a Google Spreadsheet with you. Anyone can access it via the link below:\n\nhttps://docs.google.com/spreadsheets/d/{spreadsheet_id}"
         self.drive_service.permissions().create(
             fileId=spreadsheet_id,
             body=permission,
