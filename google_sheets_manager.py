@@ -102,9 +102,10 @@ class GoogleSheetsManager:
                     "updateSheetProperties": {
                         "properties": {
                             "sheetId": sheet_id,
-                            "gridProperties": {"rowCount": row_nums + 1}  # Ensure row count matches required rows
+                            "gridProperties": {"rowCount": row_nums + 1,
+                                               "frozenRowCount": 1}
                         },
-                        "fields": "gridProperties.rowCount"
+                        "fields": "gridProperties.rowCount, gridProperties.frozenRowCount"
                     }
                 },
                 {

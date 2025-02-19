@@ -1,5 +1,5 @@
 #! /bin/bash
-export USER_EMAIL="gosugrag@gmail.com"
+export USER_EMAIL="test@email.com"
 sudo apt update
 sudo apt install -y python3 python3-pip
 cd /opt/findminiapp
