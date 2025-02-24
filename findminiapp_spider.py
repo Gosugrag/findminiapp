@@ -72,23 +72,22 @@ class FindMiniAppSpider(scrapy.Spider):
 
     def parse_app(self, response):
         app_name = response.xpath(
-            '/html/body/div[1]/main/div/div[2]/div[1]/div/div[1]/h1/text()').get(
+            '/html/body/div[1]/main//h1/text()').get(
             default="Unknown").strip()
         description = " ".join(response.xpath(
-            '/html/body/div[1]/main/div/div[4]/div[1]/div[1]/span/text()').getall()).strip()
+            '//h2[contains(text(), "Description")]/following-sibling::span/text()').getall()).strip()
         language = self.remove_emojis(", ".join(response.xpath(
             '//h3[contains(text(), "Interface languages")]/following-sibling::span/text()').getall())).strip()
         useful_links = ", ".join(response.xpath(
             '//h3[contains(text(), "More links")]/following-sibling::ul//a/@href').getall())
         user_count = self.remove_emojis(response.xpath(
-            '/html/body/div[1]/main/div/div[2]/div[1]/div/div[2]/span[2]/span/text()').get(
+            '//span[contains(text(), "monthly users")]/span/text()').get(
             default="Unknown")).strip()
         category = response.meta['category']
         app_link = self.extract_telegram_link(response)
         images = [f'=IMAGE("{response.urljoin(img)}"; 4; 200; 100)' for img in
                   response.xpath(
-                      '/html/body/div[1]/main/div/div[3]/div//img/@src').getall()]
-
+                      '/html/body/div[1]/main/div/div//div[contains(@class, "scrollbar-hide")]/img/@src').getall()]
         self.data.append(
             [app_name, description, app_link, response.url, category,
              user_count, language, useful_links] + images)
